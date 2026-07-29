@@ -208,3 +208,28 @@ log() {
         >> "$APP_DIR/logs/builder.log"
 
 }
+
+################################################################################
+# check_internet
+################################################################################
+
+check_internet() {
+
+    ping -c1 github.com >/dev/null 2>&1 || \
+        error "No Internet connection."
+
+}
+
+################################################################################
+# require_disk_space
+################################################################################
+
+require_disk_space() {
+
+    FREE=$(df -BG / | awk 'NR==2 {gsub("G","",$4);print $4}')
+
+    if [ "$FREE" -lt 15 ]; then
+        error "At least 15 GB of free disk space is required."
+    fi
+
+}
